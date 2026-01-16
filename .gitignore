@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+venv/
+env/
+.env
+*.log
+history.json
+# Ignorer les exe et binaires
+*.exe
+bin/
+ffmpeg.exe
+ffprobe.exe
+YouTubeExtractor.exe
