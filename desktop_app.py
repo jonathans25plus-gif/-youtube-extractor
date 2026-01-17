@@ -52,7 +52,7 @@ def main():
     
     # Create native window
     window = webview.create_window(
-        title='YouTube Extractor',
+        title='YouTube Extractor v1.0.2',
         url='http://127.0.0.1:5000',
         width=1200,
         height=800,

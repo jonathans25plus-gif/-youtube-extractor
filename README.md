@@ -1,17 +1,20 @@
-# 🎥 Extracteur YouTube - Kit Prêt à l'Emploi
+# 🎥 Media Extractor - Kit Prêt à l'Emploi
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![Windows](https://img.shields.io/badge/Plateforme-Windows-0078D6.svg)
+![Version](https://img.shields.io/badge/version-1.0.2-blue.svg) ![Windows](https://img.shields.io/badge/Plateforme-Windows-0078D6.svg)
 
-Un logiciel simple, gratuit et puissant pour télécharger vos vidéos et musiques depuis YouTube.
+Un logiciel simple, gratuit et puissant pour télécharger vos vidéos et musiques depuis YouTube, SoundCloud, TikTok, Vimeo et plus encore.
 
 ---
 
 ## ✨ Fonctionnalités
 
 - **🎵 Audio & Vidéo** : Téléchargez en MP3, M4A, MP4 (jusqu'à la 4K)
+- **🌐 Multi-plateformes** : YouTube, SoundCloud, TikTok, Vimeo, Dailymotion, Instagram, Twitter
 - **📋 Liste de lecture** : Ajoutez plusieurs vidéos et téléchargez-les d'un coup
-- **🔍 Recherche intégrée** : Cherchez vos vidéos directement dans l'application
-- **🖼️ Métadonnées** : Ajoute automatiquement la pochette d'album et le titre aux MP3
+- **🔍 Recherche intégrée** : Cherchez directement sur YouTube ou SoundCloud
+- **🎧 Prévisualisation** : Écoutez un extrait de 30 secondes avant de télécharger
+- **🔊 Normalisation** : Égalisez le volume de vos fichiers audio
+- **🖼️ Métadonnées** : Ajoute automatiquement la pochette et le titre aux MP3
 - **🚀 Mise à jour auto** : Le logiciel se met à jour tout seul en un clic
 
 ---
@@ -68,4 +71,4 @@ Basé sur les technologies open-source : `yt-dlp`, `Flask`, `pywebview`.
 
 ---
 
-*Version 1.0.0 - 2026*
+*Version 1.0.2 - 2026*

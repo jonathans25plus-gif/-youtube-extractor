@@ -10,16 +10,16 @@
         :root {
             --bg-primary: #0d0d0d;
             --bg-secondary: #161616;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-card-hover: rgba(255, 255, 255, 0.06);
-            --bg-input: rgba(255, 255, 255, 0.05);
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --bg-input: rgba(255, 255, 255, 0.06);
             --accent: #6366f1;
             --accent-light: #818cf8;
             --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
             --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.35);
-            --border: rgba(255, 255, 255, 0.08);
+            --text-secondary: rgba(255, 255, 255, 0.75);
+            --text-muted: rgba(255, 255, 255, 0.45);
+            --border: rgba(255, 255, 255, 0.12);
             --error: #ef4444;
             --success: #22c55e;
             --warning: #f59e0b;
@@ -128,12 +128,13 @@
 
         /* Cards */
         .card {
-            background: var(--bg-card);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
             backdrop-filter: blur(20px);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
         /* Drop Zone */
@@ -174,10 +175,10 @@
 
         .input-group label {
             display: block;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -209,6 +210,35 @@
             background: rgba(99, 102, 241, 0.05);
         }
 
+        /* Select/Dropdown */
+        .platform-select {
+            padding: 0.875rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            min-width: 160px;
+        }
+
+        .platform-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .platform-select option {
+            background: #1a1a1a;
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
         /* Buttons */
         .btn {
             padding: 0.875rem 1.5rem;
@@ -227,27 +257,42 @@
         .btn-primary {
             background: var(--accent-gradient);
             color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
         }
 
         .btn-primary:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98) translateY(0);
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
         }
 
         .btn-primary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .btn-secondary {
             background: var(--bg-input);
             color: var(--text-primary);
             border: 1px solid var(--border);
+            transition: all 0.2s ease;
         }
 
         .btn-secondary:hover {
             background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
         }
 
         .btn-ghost {
@@ -678,8 +723,27 @@
 
         .queue-empty {
             text-align: center;
-            padding: 3rem;
+            padding: 3rem 2rem;
             color: var(--text-muted);
+        }
+
+        .queue-empty .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .queue-empty p {
+            margin-bottom: 0.5rem;
+        }
+
+        .queue-empty .empty-hint {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .queue-empty .btn {
+            margin-top: 1rem;
         }
 
         /* Search */
@@ -728,6 +792,57 @@
         .search-result-meta {
             font-size: 0.8rem;
             color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+        }
+
+        .platform-badge.youtube {
+            background: rgba(255, 0, 0, 0.15);
+            color: #ff4444;
+        }
+
+        .platform-badge.soundcloud {
+            background: rgba(255, 136, 0, 0.15);
+            color: #ff8800;
+        }
+
+        .platform-badge.tiktok {
+            background: rgba(0, 242, 234, 0.15);
+            color: #00f2ea;
+        }
+
+        .platform-badge.vimeo {
+            background: rgba(26, 183, 234, 0.15);
+            color: #1ab7ea;
+        }
+
+        .platform-badge.dailymotion {
+            background: rgba(0, 175, 214, 0.15);
+            color: #00afd6;
+        }
+
+        .platform-badge.instagram {
+            background: rgba(225, 48, 108, 0.15);
+            color: #e1306c;
+        }
+
+        .platform-badge.twitter {
+            background: rgba(29, 161, 242, 0.15);
+            color: #1da1f2;
         }
 
         /* History */
@@ -782,8 +897,22 @@
 
         .history-empty {
             text-align: center;
-            padding: 3rem;
+            padding: 3rem 2rem;
             color: var(--text-muted);
+        }
+
+        .history-empty .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .history-empty p {
+            margin-bottom: 0.5rem;
+        }
+
+        .history-empty .btn {
+            margin-top: 1rem;
         }
 
         /* Alerts */
@@ -1134,6 +1263,76 @@
         .update-progress.show {
             display: block;
         }
+
+        /* Playlist Selection UI */
+        .playlist-selector-ui {
+            display: none;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .playlist-selector-ui.show {
+            display: block;
+        }
+
+        .playlist-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .playlist-scroll-area {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 0.25rem;
+            border: 1px solid var(--border);
+        }
+
+        .playlist-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s;
+        }
+
+        .playlist-checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .playlist-checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .playlist-checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .playlist-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .playlist-item-title {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
     </style>
 </head>
 
@@ -1211,9 +1410,9 @@
             <!-- URL Input -->
             <div class="card">
                 <div class="input-group">
-                    <label>URL YouTube</label>
+                    <label>URL de la vidéo</label>
                     <div class="input-row">
-                        <input type="text" id="urlInput" placeholder="https://youtube.com/watch?v=...">
+                        <input type="text" id="urlInput" placeholder="YouTube, TikTok, SoundCloud, Vimeo...">
                         <button class="btn btn-primary" id="analyzeBtn">
                             <span class="btn-text">Analyser</span>
                         </button>
@@ -1238,13 +1437,35 @@
                         <div class="preview-meta" id="previewMeta"></div>
                         <div class="audio-preview" id="audioPreview">
                             <button class="audio-preview-btn" id="audioPreviewBtn">▶</button>
-                            <span class="audio-preview-label">Écouter un extrait</span>
+                            <span class="audio-preview-label" id="audioPreviewLabel">Écouter un extrait</span>
+                            <audio id="audioPlayer" style="display: none;"></audio>
                         </div>
                     </div>
                 </div>
 
-                <!-- Playlist items -->
-                <div class="playlist-list" id="playlistList"></div>
+                <!-- Playlist Selection UI -->
+                <div class="playlist-selector-ui" id="playlistSelection">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600;">Sélection des vidéos (<span
+                                id="selectedCount">0</span>/<span id="totalCount">0</span>)</h4>
+                    </div>
+
+                    <div class="playlist-controls">
+                        <button class="btn btn-sm" id="selectAllBtn"
+                            style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">Tout cocher</button>
+                        <button class="btn btn-sm" id="deselectAllBtn"
+                            style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">Tout décocher</button>
+                    </div>
+
+                    <div class="playlist-scroll-area" id="playlistCheckboxes">
+                        <!-- Checkboxes injected via JS -->
+                    </div>
+
+                    <div style="margin-top: 0.5rem; text-align: right; color: var(--accent-light); font-size: 0.8rem;">
+                        Seules les vidéos cochées seront téléchargées
+                    </div>
+                </div>
 
                 <!-- Format Selection -->
                 <div class="format-selector">
@@ -1269,6 +1490,12 @@
                         <div class="quality-option" data-quality="flac">FLAC</div>
                         <div class="quality-option" data-quality="wav">WAV</div>
                     </div>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; cursor: pointer; font-size: 0.85rem; text-transform: none; font-weight: 400;">
+                        <input type="checkbox" id="normalizeVolume"
+                            style="width: 18px; height: 18px; accent-color: var(--accent);">
+                        <span>🔊 Normaliser le volume (recommandé pour les playlists)</span>
+                    </label>
                 </div>
 
                 <!-- Video Quality -->
@@ -1334,9 +1561,15 @@
         <section id="searchSection" class="section">
             <div class="card">
                 <div class="input-group">
-                    <label>Rechercher sur YouTube</label>
-                    <div class="input-row">
-                        <input type="search" id="searchInput" placeholder="Artiste, titre, mot-clé...">
+                    <label>Rechercher des médias</label>
+                    <div class="input-row" style="gap: 0.5rem;">
+                        <select id="searchPlatform" class="platform-select">
+                            <option value="youtube">📺 YouTube</option>
+                            <option value="soundcloud">🎵 SoundCloud</option>
+                            <option value="dailymotion">🎬 Dailymotion</option>
+                        </select>
+                        <input type="search" id="searchInput" placeholder="Artiste, titre... ex : Eminem – Mockingbird"
+                            style="flex: 1;">
                         <button class="btn btn-primary" id="searchBtn">🔍 Rechercher</button>
                     </div>
                 </div>
@@ -1355,9 +1588,11 @@
                 </div>
                 <div class="queue-list" id="queueList">
                     <div class="queue-empty">
-                        <p>Aucun téléchargement en attente</p>
-                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Ajoutez des vidéos depuis l'onglet Télécharger
-                        </p>
+                        <div class="empty-icon">📋</div>
+                        <p>La file d'attente est vide</p>
+                        <p class="empty-hint">Ajoutez des vidéos depuis l'onglet Télécharger</p>
+                        <button class="btn btn-primary"
+                            onclick="document.querySelector('[data-tab=download]').click()">Ajouter une vidéo</button>
                     </div>
                 </div>
             </div>
@@ -1367,12 +1602,19 @@
         <section id="historySection" class="section">
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3 style="font-size: 1rem; font-weight: 500;">Historique des téléchargements</h3>
+                    <h3 style="font-size: 1.1rem; font-weight: 600;">Historique des téléchargements</h3>
                     <button class="btn btn-ghost" id="clearHistoryBtn">🗑️ Effacer</button>
+                </div>
+                <div class="input-row" style="margin-bottom: 1rem;">
+                    <input type="search" id="historyFilter" placeholder="🔍 Filtrer l'historique..." style="flex: 1;">
                 </div>
                 <div class="history-list" id="historyList">
                     <div class="history-empty">
+                        <div class="empty-icon">📭</div>
                         <p>Aucun téléchargement pour le moment</p>
+                        <button class="btn btn-primary"
+                            onclick="document.querySelector('[data-tab=download]').click()">Commencer un
+                            téléchargement</button>
                     </div>
                 </div>
             </div>
@@ -1382,13 +1624,15 @@
         <section id="aboutSection" class="section">
             <div class="about-header">
                 <div class="about-logo">⬇️</div>
-                <h2 class="about-title">YouTube Extractor</h2>
+                <h2 class="about-title">Media Extractor</h2>
                 <div class="about-version" id="aboutVersion">Version 1.0.0</div>
             </div>
 
             <div class="about-credits">
                 <div class="about-credits-title">Créé par</div>
                 <div class="about-credits-author">Jonathan Paul & Antigravity</div>
+                <a href="mailto:jonathan.paulmailpro@gmail.com" class="btn btn-secondary" style="margin-top: 1rem;">📧
+                    Contact</a>
             </div>
 
             <!-- User Manual (README) -->
@@ -1594,45 +1838,204 @@
                     ${info.view_count ? `<span>👁️ ${formatNumber(info.view_count)}</span>` : ''}
                 `;
                 document.getElementById('audioPreview').style.display = 'flex';
+                document.getElementById('playlistSelection').classList.remove('show');
             } else {
                 meta = `<span>📁 Playlist: ${info.count} vidéos</span><span>👤 ${info.uploader}</span>`;
                 document.getElementById('audioPreview').style.display = 'none';
+
+                // Setup Playlist Selection
+                const playlistContainer = document.getElementById('playlistCheckboxes');
+                if (info.videos && info.videos.length > 0) {
+                    playlistContainer.innerHTML = info.videos.map((v, i) => `
+                        <label class="playlist-checkbox-item">
+                            <input type="checkbox" checked value="${v.id}" data-url="${v.url}" data-title="${escapeHtml(v.title)}" class="playlist-checkbox">
+                            <div class="playlist-item-info">
+                                <div class="playlist-item-title">${i + 1}. ${escapeHtml(v.title)}</div>
+                                <div class="playlist-item-meta">⏱️ ${v.duration_formatted || '--:--'}</div>
+                            </div>
+                        </label>
+                    `).join('');
+
+                    document.getElementById('playlistSelection').classList.add('show');
+                    updateSelectionCounts();
+                }
             }
             document.getElementById('previewMeta').innerHTML = meta;
-
-            // Show playlist items
-            const playlistList = document.getElementById('playlistList');
-            if (info.type === 'playlist' && info.videos) {
-                playlistList.innerHTML = info.videos.map((v, i) => `
-                    <div class="playlist-item">
-                        <span class="playlist-number">${i + 1}</span>
-                        <span class="playlist-item-title">${escapeHtml(v.title)}</span>
-                        <span class="playlist-item-duration">${v.duration_formatted || '--:--'}</span>
-                    </div>
-                `).join('');
-                playlistList.style.display = 'block';
-            } else {
-                playlistList.style.display = 'none';
-            }
 
             previewCard.classList.add('show');
             successSection.classList.remove('show');
             progressSection.classList.remove('show');
         }
 
+        // Playlist Checkbox Helpers
+        function updateSelectionCounts() {
+            const checkboxes = document.querySelectorAll('.playlist-checkbox');
+            const total = checkboxes.length;
+            const selected = document.querySelectorAll('.playlist-checkbox:checked').length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('selectedCount').textContent = selected;
+        }
+
+        // Playlist Event Listeners
+        document.getElementById('selectAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.playlist-checkbox').forEach(cb => cb.checked = true);
+            updateSelectionCounts();
+        });
+
+        document.getElementById('deselectAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.playlist-checkbox').forEach(cb => cb.checked = false);
+            updateSelectionCounts();
+        });
+
+        // Delegate event for individual checkbox changes
+        document.getElementById('playlistCheckboxes').addEventListener('change', (e) => {
+            if (e.target.classList.contains('playlist-checkbox')) {
+                updateSelectionCounts();
+            }
+        });
+
         // Audio Preview
-        document.getElementById('audioPreviewBtn').addEventListener('click', () => {
-            if (currentVideoInfo && currentVideoInfo.id) {
-                window.open(`https://www.youtube.com/watch?v=${currentVideoInfo.id}`, '_blank');
+        let audioPlaying = false;
+        let audioPreviewTimeout = null;
+
+        document.getElementById('audioPreviewBtn').addEventListener('click', async () => {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const previewBtn = document.getElementById('audioPreviewBtn');
+            const previewLabel = document.getElementById('audioPreviewLabel');
+
+            if (audioPlaying) {
+                // Stop playing
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlaying = false;
+                previewBtn.textContent = '▶';
+                previewLabel.textContent = 'Écouter un extrait';
+                if (audioPreviewTimeout) clearTimeout(audioPreviewTimeout);
+                return;
+            }
+
+            if (!currentVideoInfo) return;
+
+            // Show loading state
+            previewBtn.textContent = '⏳';
+            previewLabel.textContent = 'Chargement...';
+
+            try {
+                // Use the original URL stored in currentVideoInfo (works for YouTube, SoundCloud, etc.)
+                const videoUrl = currentVideoInfo.url || `https://www.youtube.com/watch?v=${currentVideoInfo.id}`;
+                const response = await fetch('/api/preview-audio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: videoUrl })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.audio_url) {
+                    audioPlayer.src = data.audio_url;
+                    audioPlayer.play();
+                    audioPlaying = true;
+                    previewBtn.textContent = '⏸';
+                    previewLabel.textContent = 'Lecture en cours (30s max)';
+
+                    // Auto-stop after 30 seconds
+                    audioPreviewTimeout = setTimeout(() => {
+                        audioPlayer.pause();
+                        audioPlayer.currentTime = 0;
+                        audioPlaying = false;
+                        previewBtn.textContent = '▶';
+                        previewLabel.textContent = 'Écouter un extrait';
+                    }, 30000);
+
+                    // Handle audio end
+                    audioPlayer.onended = () => {
+                        audioPlaying = false;
+                        previewBtn.textContent = '▶';
+                        previewLabel.textContent = 'Écouter un extrait';
+                        if (audioPreviewTimeout) clearTimeout(audioPreviewTimeout);
+                    };
+                } else {
+                    // Fallback: open YouTube
+                    window.open(videoUrl, '_blank');
+                    previewBtn.textContent = '▶';
+                    previewLabel.textContent = 'Écouter un extrait';
+                }
+            } catch (e) {
+                // Fallback: open YouTube
+                if (currentVideoInfo && currentVideoInfo.id) {
+                    window.open(`https://www.youtube.com/watch?v=${currentVideoInfo.id}`, '_blank');
+                }
+                previewBtn.textContent = '▶';
+                previewLabel.textContent = 'Écouter un extrait';
             }
         });
 
         // Download
         document.getElementById('downloadBtn').addEventListener('click', startDownload);
 
+        function getSelectedVideos() {
+            // If checking for playlist items
+            const container = document.getElementById('playlistCheckboxes');
+            if (container.children.length === 0) return null; // Not showing playlist list
+
+            const checkedBoxes = Array.from(document.querySelectorAll('.playlist-checkbox:checked'));
+            return checkedBoxes.map(cb => ({
+                id: cb.value,
+                url: cb.dataset.url || `https://www.youtube.com/watch?v=${cb.value}`,
+                title: cb.dataset.title,
+                thumbnail: currentVideoInfo.thumbnail // Use playlist thumb as fallback
+            }));
+        }
+
         async function startDownload() {
             if (!currentVideoInfo) return;
 
+            // Handle Playlist Selection
+            const playlistItems = getSelectedVideos();
+            if (playlistItems) {
+                if (playlistItems.length === 0) {
+                    showError("Veuillez sélectionner au moins une vidéo");
+                    return;
+                }
+
+                // If multiple items (or one item from playlist mode), add to queue and start
+                const confirmDownload = document.getElementById('downloadBtn');
+                const originalText = confirmDownload.innerHTML;
+                confirmDownload.innerText = "Ajout en cours...";
+                confirmDownload.disabled = true;
+
+                for (const vid of playlistItems) {
+                    await fetch('/api/queue/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            url: vid.url,
+                            title: vid.title,
+                            thumbnail: vid.thumbnail,
+                            format: selectedFormat,
+                            quality: selectedQuality,
+                            normalize: document.getElementById('normalizeVolume')?.checked || false
+                        })
+                    });
+                }
+
+                // Start Queue
+                await fetch('/api/queue/start', { method: 'POST' });
+
+                confirmDownload.innerHTML = originalText;
+                confirmDownload.disabled = false;
+
+                previewCard.classList.remove('show');
+                currentVideoInfo = null;
+                urlInput.value = '';
+
+                // Switch to queue
+                document.querySelector('[data-tab="queue"]').click();
+                return;
+            }
+
+            // Standard Single Download
             const url = urlInput.value.trim();
             const folder = folderInput.value.trim();
 
@@ -1644,7 +2047,8 @@
                         url,
                         folder,
                         format: selectedFormat,
-                        quality: selectedQuality
+                        quality: selectedQuality,
+                        normalize: document.getElementById('normalizeVolume')?.checked || false
                     })
                 });
 
@@ -1699,10 +2103,27 @@
         }
 
         function updateProgress(data) {
-            document.getElementById('progressBar').style.width = `${data.percent || 0}%`;
-            document.getElementById('progressPercent').textContent = `${data.percent || 0}%`;
-            document.getElementById('progressSpeed').textContent = data.speed || '';
-            document.getElementById('progressTitle').textContent = data.current_title || '-';
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressSpeed = document.getElementById('progressSpeed');
+            const progressTitle = document.getElementById('progressTitle');
+
+            progressBar.style.width = `${data.percent || 0}%`;
+            progressPercent.textContent = `${data.percent || 0}%`;
+
+            if (data.status === 'processing') {
+                progressSpeed.textContent = 'Conversion en cours...';
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+            } else if (data.status === 'downloading') {
+                progressSpeed.textContent = data.speed || '';
+            } else if (data.status === 'completed') {
+                progressSpeed.textContent = 'Terminé ✓';
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+            }
+
+            progressTitle.textContent = data.current_title || '-';
         }
 
         function showSuccess(data) {
@@ -1758,17 +2179,37 @@
         document.getElementById('addToQueueBtn').addEventListener('click', async () => {
             if (!currentVideoInfo) return;
 
-            await fetch('/api/queue/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            const itemsToAdd = [];
+            const playlistItems = getSelectedVideos();
+
+            if (playlistItems) {
+                if (playlistItems.length === 0) {
+                    showError("Veuillez sélectionner au moins une vidéo");
+                    return;
+                }
+                itemsToAdd.push(...playlistItems);
+            } else {
+                itemsToAdd.push({
                     url: urlInput.value.trim(),
                     title: currentVideoInfo.title,
-                    thumbnail: currentVideoInfo.thumbnail,
-                    format: selectedFormat,
-                    quality: selectedQuality
-                })
-            });
+                    thumbnail: currentVideoInfo.thumbnail
+                });
+            }
+
+            for (const item of itemsToAdd) {
+                await fetch('/api/queue/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        url: item.url,
+                        title: item.title,
+                        thumbnail: item.thumbnail,
+                        format: selectedFormat,
+                        quality: selectedQuality,
+                        normalize: document.getElementById('normalizeVolume')?.checked || false
+                    })
+                });
+            }
 
             previewCard.classList.remove('show');
             currentVideoInfo = null;
@@ -1788,8 +2229,10 @@
             if (!data.queue || data.queue.length === 0) {
                 queueList.innerHTML = `
                     <div class="queue-empty">
-                        <p>Aucun téléchargement en attente</p>
-                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Ajoutez des vidéos depuis l'onglet Télécharger</p>
+                        <div class="empty-icon">📋</div>
+                        <p>La file d'attente est vide</p>
+                        <p class="empty-hint">Ajoutez des vidéos depuis l'onglet Télécharger</p>
+                        <button class="btn btn-primary" onclick="document.querySelector('[data-tab=download]').click()">Ajouter une vidéo</button>
                     </div>
                 `;
                 return;
@@ -1827,9 +2270,11 @@
         // Search & Pagination
         let currentSearchQuery = '';
         let currentSearchPage = 1;
+        let currentSearchPlatform = 'youtube';
 
-        async function searchYouTube(page = 1) {
+        async function searchMedia(page = 1) {
             const query = document.getElementById('searchInput').value.trim();
+            const platform = document.getElementById('searchPlatform').value;
             if (!query && !currentSearchQuery) return;
 
             // If new search (not pagination), reset page
@@ -1839,6 +2284,8 @@
             } else if (query) {
                 currentSearchQuery = query;
             }
+
+            currentSearchPlatform = platform;
 
             // Use provided page
             currentSearchPage = page;
@@ -1854,7 +2301,7 @@
             resultsContainer.style.opacity = '0.5';
 
             try {
-                const response = await fetch(`/api/search?q=${encodeURIComponent(currentSearchQuery)}&page=${currentSearchPage}`);
+                const response = await fetch(`/api/search?q=${encodeURIComponent(currentSearchQuery)}&page=${currentSearchPage}&platform=${currentSearchPlatform}`);
                 const data = await response.json();
 
                 resultsContainer.style.opacity = '1';
@@ -1871,6 +2318,18 @@
                     return;
                 }
 
+                // Platform badge helper
+                const getPlatformBadge = (url) => {
+                    if (url.includes('youtube.com') || url.includes('youtu.be')) return '<span class="platform-badge youtube">YouTube</span>';
+                    if (url.includes('soundcloud.com')) return '<span class="platform-badge soundcloud">SoundCloud</span>';
+                    if (url.includes('tiktok.com')) return '<span class="platform-badge tiktok">TikTok</span>';
+                    if (url.includes('vimeo.com')) return '<span class="platform-badge vimeo">Vimeo</span>';
+                    if (url.includes('dailymotion.com')) return '<span class="platform-badge dailymotion">Dailymotion</span>';
+                    if (url.includes('instagram.com')) return '<span class="platform-badge instagram">Instagram</span>';
+                    if (url.includes('twitter.com') || url.includes('x.com')) return '<span class="platform-badge twitter">Twitter</span>';
+                    return '<span class="platform-badge">Média</span>';
+                };
+
                 // Render Results
                 resultsContainer.innerHTML = data.results.map(video => `
                     <div class="search-result" onclick="selectSearchResult('${video.url}')">
@@ -1878,7 +2337,7 @@
                         <div class="search-result-info">
                             <div class="search-result-title">${escapeHtml(video.title)}</div>
                             <div class="search-result-meta">
-                                ${video.uploader} • ${video.duration_formatted}
+                                ${getPlatformBadge(video.url)} ${video.uploader} • ${video.duration_formatted}
                             </div>
                         </div>
                     </div>
@@ -1894,6 +2353,11 @@
                 searchInput.disabled = false;
                 searchBtn.innerHTML = '🔍 Rechercher';
             }
+        }
+
+        // Keep old function name for compatibility
+        function searchYouTube(page = 1) {
+            searchMedia(page);
         }
 
         function renderPagination(data) {
@@ -2070,23 +2534,31 @@
         }
 
         // History
+        let allHistoryItems = [];
+
         async function loadHistory() {
             const response = await fetch('/api/history');
             const history = await response.json();
+            allHistoryItems = history || [];
+            renderHistory(allHistoryItems);
+        }
 
+        function renderHistory(history) {
             const historyList = document.getElementById('historyList');
 
             if (!history || history.length === 0) {
                 historyList.innerHTML = `
                     <div class="history-empty">
+                        <div class="empty-icon">📭</div>
                         <p>Aucun téléchargement pour le moment</p>
+                        <button class="btn btn-primary" onclick="document.querySelector('[data-tab=download]').click()">Commencer un téléchargement</button>
                     </div>
                 `;
                 return;
             }
 
             historyList.innerHTML = history.map(item => `
-                <div class="history-item">
+                <div class="history-item" data-path="${escapeHtml(item.path || '')}">
                     <div class="history-icon">${item.type === 'video' ? '🎬' : '🎵'}</div>
                     <div class="history-info">
                         <div class="history-title">${escapeHtml(item.title)}</div>
@@ -2096,9 +2568,34 @@
                             <span>${item.size || ''}</span>
                         </div>
                     </div>
+                    <button class="btn btn-ghost" onclick="openHistoryFolder('${escapeHtml(item.path || '')}')" title="Ouvrir le dossier">📂</button>
                 </div>
             `).join('');
         }
+
+        async function openHistoryFolder(filePath) {
+            if (!filePath) return;
+            // Extract folder from file path
+            const folder = filePath.substring(0, filePath.lastIndexOf('\\')) || filePath.substring(0, filePath.lastIndexOf('/'));
+            await fetch('/api/open-folder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ folder: folder || folderInput.value })
+            });
+        }
+
+        // History Filter
+        document.getElementById('historyFilter').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                renderHistory(allHistoryItems);
+                return;
+            }
+            const filtered = allHistoryItems.filter(item =>
+                item.title.toLowerCase().includes(query)
+            );
+            renderHistory(filtered);
+        });
 
         document.getElementById('clearHistoryBtn').addEventListener('click', async () => {
             await fetch('/api/history/clear', { method: 'POST' });
@@ -2116,9 +2613,13 @@
         }
 
         function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         function formatNumber(num) {

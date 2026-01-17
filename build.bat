@@ -22,7 +22,7 @@ echo.
 echo Starting PyInstaller build...
 echo.
 
-pyinstaller YouTubeExtractor.spec --clean --noconfirm
+python -m PyInstaller YouTubeExtractor.spec --clean --noconfirm
 
 echo.
 if exist "dist\YouTubeExtractor.exe" (

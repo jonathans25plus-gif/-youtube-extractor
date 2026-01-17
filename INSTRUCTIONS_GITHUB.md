@@ -1,41 +1,36 @@
 
 # 🚀 Instructions pour publier et activer (Auto-Update)
 
-Tout est prêt ! L'application contient maintenant le manuel d'utilisation et le système de mise à jour.
-Le fichier exécutable final est ici : `dist\YouTubeExtractor.exe`.
+J'ai nettoyé le projet pour retirer les gros fichiers `.exe` qui bloquaient l'envoi.
 
-## Étape 1 : Envoyer le code sur GitHub
+## Étape 1 : Envoyer le code source (Force)
 
-Ouvrez un terminal (PowerShell ou CMD) dans ce dossier et tapez :
+Comme nous avons réinitialisé le dépôt pour le nettoyer, il faut forcer l'envoi une première fois.
+Ouvrez votre terminal et tapez :
 
 ```bash
-git push -u origin main
+git push -f origin main
 ```
 
-*(Si on vous demande vos identifiants, entrez votre nom d'utilisateur et votre mot de passe/token GitHub).*
+*(Cela enverra uniquement le code Python, HTML, et les fichiers de configuration, c'est très rapide).*
 
-## Étape 2 : Créer la Release (Important pour la mise à jour auto !)
+## Étape 2 : Créer la Release et Ajouter l'Exécutable
+
+C'est ici que l'on met le fichier `.exe` (et non pas dans le code source).
 
 1. Allez sur votre repo : https://github.com/jonathans25plus-gif/-youtube-extractor
 2. Cliquez sur **"Releases"** (à droite) puis **"Draft a new release"**.
-3. **Choose a tag** : Tapez `v1.0.0` et cliquez sur "Create new tag".
+3. **Choose a tag** : `v1.0.0` (Create new tag).
 4. **Release title** : `Version 1.0.0`
-5. **Description** :
+5. **Description** : Copiez le texte ci-dessous si vous voulez :
    ```
    Première version officielle !
    - Téléchargement Audio/Vidéo
-   - File d'attente
    - Recherche paginée
    - Mise à jour automatique
    ```
-6. **IMPORTANT** : Glissez-déposez le fichier `dist\YouTubeExtractor.exe` dans la zone "Attach binaries by dropping them here".
-7. Cliquez sur **Target** > `main` (pour être sûr).
-8. Cliquez sur **Publish release**.
+6. **⚠️ TRÈS IMPORTANT** : Prenez le fichier `dist\YouTubeExtractor.exe` sur votre PC, et glissez-le dans la zone "Attach binaries...". C'est grâce à ça que la mise à jour fonctionnera.
+7. Cliquez sur **Publish release**.
 
 ## C'est fini !
-
-Désormais, quand vous sortirez la version `v1.0.1` :
-1. Changez `APP_VERSION = '1.0.1'` dans `app.py`.
-2. Refaites le build (`build.bat` ou la commande PyInstaller).
-3. Créez une nouvelle release `v1.0.1` sur GitHub avec le nouveau `.exe`.
-4. Tous les utilisateurs de la v1.0.0 recevront une notification et pourront mettre à jour en un clic ! 🎉
+Votre application saura maintenant qu'une version 1.0.0 existe, et pourra télécharger le fichier `.exe` que vous venez d'uploader.
