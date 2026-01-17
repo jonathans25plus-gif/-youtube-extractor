@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Extractor</title>
+    <title>Media Extractor - YouTube, TikTok, Instagram & +1800 sites</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1333,6 +1333,111 @@
             color: var(--text-muted);
             margin-top: 2px;
         }
+
+        /* ============ GLOW EFFECT ============ */
+        .app::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150vw;
+            height: 100vh;
+            background: radial-gradient(ellipse at center top,
+                    rgba(99, 102, 241, 0.20) 0%,
+                    rgba(139, 92, 246, 0.10) 25%,
+                    rgba(99, 102, 241, 0.05) 45%,
+                    transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ============ FEATURES GRID ============ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 1.25rem 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 0.75rem 0.25rem;
+            transition: transform 0.2s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+        }
+
+        .feature-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 700px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ============ PLATFORM BADGES ============ */
+        .supported-platforms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .platform-badge:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .platform-badge-icon {
+            font-size: 0.9rem;
+        }
+
+        .platform-badge.highlight {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            color: white;
+            font-weight: 500;
+        }
     </style>
 </head>
 
@@ -1341,10 +1446,51 @@
         <header class="header">
             <div class="logo">
                 <div class="logo-icon">⬇️</div>
-                <h1>YouTube Extractor</h1>
+                <h1>Media Extractor</h1>
             </div>
-            <p class="subtitle">Téléchargez audio et vidéo en haute qualité</p>
+            <p class="subtitle">Téléchargez audio et vidéo depuis +1800 sites</p>
         </header>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-label">Rapide</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🆓</div>
+                <div class="feature-label">Gratuit</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-label">Sécurisé</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🌐</div>
+                <div class="feature-label">Multi-Sites</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📁</div>
+                <div class="feature-label">Playlist</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎵</div>
+                <div class="feature-label">MP3 / MP4</div>
+            </div>
+        </div>
+
+        <!-- Supported Platforms -->
+        <div class="supported-platforms">
+            <span class="platform-badge"><span class="platform-badge-icon">▶️</span> YouTube</span>
+            <span class="platform-badge"><span class="platform-badge-icon">🎵</span> TikTok</span>
+            <span class="platform-badge"><span class="platform-badge-icon">📸</span> Instagram</span>
+            <span class="platform-badge"><span class="platform-badge-icon">🐦</span> Twitter/X</span>
+            <span class="platform-badge"><span class="platform-badge-icon">☁️</span> SoundCloud</span>
+            <span class="platform-badge"><span class="platform-badge-icon">📘</span> Facebook</span>
+            <span class="platform-badge"><span class="platform-badge-icon">🎮</span> Twitch</span>
+            <span class="platform-badge"><span class="platform-badge-icon">📺</span> Vimeo</span>
+            <span class="platform-badge highlight"><span class="platform-badge-icon">✨</span> +1800 sites</span>
+        </div>
 
         <div id="updateBanner" class="update-banner">
             <div class="update-banner-text">

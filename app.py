@@ -31,7 +31,7 @@ if getattr(sys, 'frozen', False):
         os.environ["PATH"] += os.pathsep + bin_path
 
 # ============== APP VERSION & UPDATE CONFIG ==============
-APP_VERSION = "1.0.2"
+APP_VERSION = "1.0.4"
 GITHUB_REPO = "jonathans25plus-gif/-youtube-extractor"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -148,7 +148,7 @@ def detect_url_type(url):
     """Detect the type and platform of media URL"""
     url = url.strip().lower()
     
-    # Platform detection
+    # Platform detection - Extended for multi-platform support
     platform_patterns = {
         'youtube': r'(?:youtube\.com|youtu\.be)',
         'tiktok': r'(?:tiktok\.com|vm\.tiktok\.com)',
@@ -157,6 +157,16 @@ def detect_url_type(url):
         'dailymotion': r'(?:dailymotion\.com|dai\.ly)',
         'instagram': r'(?:instagram\.com|instagr\.am)',
         'twitter': r'(?:twitter\.com|x\.com)',
+        'facebook': r'(?:facebook\.com|fb\.watch|fb\.com)',
+        'twitch': r'(?:twitch\.tv|clips\.twitch\.tv)',
+        'reddit': r'(?:reddit\.com|v\.redd\.it)',
+        'pinterest': r'pinterest\.com',
+        'bandcamp': r'bandcamp\.com',
+        'bilibili': r'(?:bilibili\.com|b23\.tv)',
+        'spotify': r'(?:spotify\.com|open\.spotify\.com)',
+        'tumblr': r'tumblr\.com',
+        'linkedin': r'linkedin\.com',
+        'ted': r'(?:ted\.com|tedtalks)',
     }
     
     platform = 'unknown'
