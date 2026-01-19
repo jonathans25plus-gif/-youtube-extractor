@@ -31,7 +31,7 @@ if getattr(sys, 'frozen', False):
         os.environ["PATH"] += os.pathsep + bin_path
 
 # ============== APP VERSION & UPDATE CONFIG ==============
-APP_VERSION = "1.0.4"
+APP_VERSION = "1.0.5"
 GITHUB_REPO = "jonathans25plus-gif/-youtube-extractor"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -261,6 +261,10 @@ def get_video_info(url):
         'quiet': True,
         'no_warnings': True,
         'extract_flat': 'in_playlist',
+        # Ensure no playlist limits
+        'playliststart': 1,
+        'playlistend': None,  # No end limit - get all videos
+        'ignoreerrors': True,  # Continue on individual video errors
     }
     
     # Explicitly set ffmpeg location
@@ -289,7 +293,7 @@ def get_video_info(url):
                     'type': 'playlist',
                     'title': info.get('title', 'Playlist'),
                     'count': len(videos),
-                    'videos': videos[:50],
+                    'videos': videos,  # Return all videos, no limit
                     'uploader': info.get('uploader', 'Unknown'),
                 }
             else:
@@ -498,8 +502,19 @@ def download_media(task_id, url, output_folder, format_type='audio', quality='be
         'no_warnings': True,
         'ignoreerrors': True,
         'continuedl': True,  # Resume downloads
-        'retries': 3,
-        'fragment_retries': 3,
+        'retries': 5,
+        'fragment_retries': 5,
+        'extractor_retries': 3,
+        # Handle age-restricted and other special content
+        'age_limit': None,  # No age limit
+        'geo_bypass': True,
+        'geo_bypass_country': 'US',
+        # Use cookies from browser if available (helps with restrictions)
+        'cookiesfrombrowser': ('chrome',) if shutil.which('chrome') else None,
+        # Socket timeout
+        'socket_timeout': 30,
+        # Retry on HTTP errors
+        'http_chunk_size': 10485760,  # 10MB chunks
     })
     
     active_downloads[task_id] = {
@@ -520,11 +535,24 @@ def download_media(task_id, url, output_folder, format_type='audio', quality='be
                 update_queue_item_status(task_id, 'cancelled')
                 return
 
-            # Extract info first
-            info = ydl.extract_info(url, download=False)
+            # Extract info first with retry logic
+            info = None
+            extract_retries = 3
+            for attempt in range(extract_retries):
+                try:
+                    info = ydl.extract_info(url, download=False)
+                    if info is not None:
+                        break
+                except Exception as extract_err:
+                    log_error(f"Extract info attempt {attempt + 1} failed for {url}: {str(extract_err)}")
+                    if attempt < extract_retries - 1:
+                        import time
+                        time.sleep(1)  # Brief pause before retry
+                    else:
+                        raise Exception(f"Failed to extract info after {extract_retries} attempts: {str(extract_err)}")
             
             if info is None:
-                raise Exception("Could not fetch video info (invalid URL?)")
+                raise Exception("Could not fetch video info (invalid URL or video unavailable)")
 
             if 'entries' in info:
                 total = len([e for e in info.get('entries', []) if e])
