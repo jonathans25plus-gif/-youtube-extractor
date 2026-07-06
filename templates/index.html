@@ -2621,7 +2621,13 @@
         }
 
         async function startUpdateProcess(downloadUrl) {
-            if (!downloadUrl) return;
+            if (!downloadUrl) {
+                // No exe available — show message and link to GitHub
+                alert('⚠️ Aucun fichier .exe disponible pour cette version.\n\nRendez-vous sur la page GitHub pour télécharger manuellement.');
+                window.open('https://github.com/jonathans25plus-gif/-youtube-extractor/releases/latest', '_blank');
+                document.getElementById('updateModal').classList.remove('show');
+                return;
+            }
 
             document.getElementById('updateActions').style.display = 'none';
             document.getElementById('updateProgress').style.display = 'block';
