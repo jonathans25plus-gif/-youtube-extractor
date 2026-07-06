@@ -31,7 +31,7 @@ if getattr(sys, 'frozen', False):
         os.environ["PATH"] += os.pathsep + bin_path
 
 # ============== APP VERSION & UPDATE CONFIG ==============
-APP_VERSION = "1.0.5"
+APP_VERSION = "1.0.6"
 GITHUB_REPO = "jonathans25plus-gif/-youtube-extractor"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -255,6 +255,35 @@ def format_size(bytes_size):
     return f"{bytes_size:.1f} TB"
 
 
+def get_platform_ydl_opts(url=''):
+    """Get platform-specific yt-dlp options for better compatibility"""
+    opts = {
+        # Realistic User-Agent to avoid blocks from Instagram, Twitter, etc.
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+        },
+        # General robustness options
+        'socket_timeout': 30,
+        'retries': 5,
+        'fragment_retries': 5,
+        'extractor_retries': 3,
+        'geo_bypass': True,
+    }
+    
+    url_lower = url.lower() if url else ''
+    
+    # Instagram-specific options
+    if 'instagram.com' in url_lower or 'instagr.am' in url_lower:
+        opts['extractor_args'] = {'instagram': {'skip': ['dash']}}
+    
+    # Twitter/X-specific options
+    if 'twitter.com' in url_lower or 'x.com' in url_lower:
+        opts['extractor_args'] = {'twitter': {'legacy_api': ['true']}}
+    
+    return opts
+
+
 def get_video_info(url):
     """Get video/playlist information without downloading"""
     ydl_opts = {
@@ -267,6 +296,9 @@ def get_video_info(url):
         'ignoreerrors': True,  # Continue on individual video errors
     }
     
+    # Add platform-specific options (User-Agent, etc.)
+    ydl_opts.update(get_platform_ydl_opts(url))
+    
     # Explicitly set ffmpeg location
     ffmpeg_loc = get_ffmpeg_path()
     if ffmpeg_loc:
@@ -276,18 +308,26 @@ def get_video_info(url):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             
-            if 'entries' in info:
+            # Guard against None result
+            if info is None:
+                return {'error': 'Could not fetch video info (invalid URL or content unavailable)'}
+            
+            if info.get('entries') is not None:
                 # It's a playlist
                 videos = []
-                for entry in info.get('entries', []):
+                for entry in (info.get('entries') or []):
                     if entry:
                         video_id = entry.get('id', '')
+                        # Use webpage_url if available, otherwise build platform-appropriate URL
+                        entry_url = entry.get('webpage_url') or entry.get('url', '')
+                        if not entry_url and video_id:
+                            entry_url = f"https://www.youtube.com/watch?v={video_id}"
                         videos.append({
                             'id': video_id,
                             'title': entry.get('title', 'Unknown'),
                             'duration': entry.get('duration', 0),
                             'thumbnail': entry.get('thumbnail', ''),
-                            'url': f"https://www.youtube.com/watch?v={video_id}",
+                            'url': entry_url,
                         })
                 return {
                     'type': 'playlist',
@@ -319,7 +359,14 @@ def get_available_formats(info):
     formats = []
     seen_qualities = set()
     
-    for f in info.get('formats', []):
+    # Guard against None info or None formats list
+    if not info:
+        return formats
+    raw_formats = info.get('formats') or []
+    
+    for f in raw_formats:
+        if not f:
+            continue
         if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
             height = f.get('height', 0)
             if height and height not in seen_qualities:
@@ -496,26 +543,31 @@ def download_media(task_id, url, output_folder, format_type='audio', quality='be
     if ffmpeg_loc:
         ydl_opts['ffmpeg_location'] = ffmpeg_loc
     
+    # Add platform-specific options (User-Agent, Instagram support, etc.)
+    ydl_opts.update(get_platform_ydl_opts(url))
+    
     ydl_opts.update({
         'progress_hooks': [progress_hook],
         'quiet': True,
         'no_warnings': True,
         'ignoreerrors': True,
         'continuedl': True,  # Resume downloads
-        'retries': 5,
-        'fragment_retries': 5,
-        'extractor_retries': 3,
         # Handle age-restricted and other special content
         'age_limit': None,  # No age limit
-        'geo_bypass': True,
         'geo_bypass_country': 'US',
-        # Use cookies from browser if available (helps with restrictions)
-        'cookiesfrombrowser': ('chrome',) if shutil.which('chrome') else None,
-        # Socket timeout
-        'socket_timeout': 30,
         # Retry on HTTP errors
         'http_chunk_size': 10485760,  # 10MB chunks
     })
+    
+    # Try to load Chrome cookies (helps with restricted content)
+    # Falls back gracefully if Chrome is open/locked
+    try:
+        test_opts = {**ydl_opts, 'cookiesfrombrowser': ('chrome',)}
+        with yt_dlp.YoutubeDL(test_opts) as test_ydl:
+            test_ydl.cookiejar  # Force cookie loading to test access
+        ydl_opts['cookiesfrombrowser'] = ('chrome',)
+    except Exception:
+        log_error("Could not load Chrome cookies (browser may be open). Continuing without cookies.")
     
     active_downloads[task_id] = {
         'status': 'starting',
@@ -554,8 +606,9 @@ def download_media(task_id, url, output_folder, format_type='audio', quality='be
             if info is None:
                 raise Exception("Could not fetch video info (invalid URL or video unavailable)")
 
-            if 'entries' in info:
-                total = len([e for e in info.get('entries', []) if e])
+            if info.get('entries') is not None:
+                entries_list = [e for e in (info.get('entries') or []) if e]
+                total = len(entries_list)
                 active_downloads[task_id]['total'] = total
             
             result = ydl.extract_info(url, download=True)
@@ -565,8 +618,14 @@ def download_media(task_id, url, output_folder, format_type='audio', quality='be
                 update_queue_item_status(task_id, 'cancelled')
                 return
             
-            # Process results
-            entries = result.get('entries', [result]) if 'entries' in result else [result]
+            # Process results - guard against None result
+            if result is None:
+                raise Exception("Download returned no result (content may be unavailable)")
+            
+            if result.get('entries') is not None:
+                entries = [e for e in (result.get('entries') or []) if e]
+            else:
+                entries = [result]
             
             for entry in entries:
                 if entry:
